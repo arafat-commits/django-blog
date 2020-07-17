@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->                                              
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+<style>
+
+  body {
+      background: navy;
+  }
+
+  h1, h2, h3, h4, h5 {
+      color: black;
+      text-align: center;
+  }
+
+  .site-header {
+      margin-bottom: 110px;
+  }
+
+  .site-header .navbar-expand-md {
+      height: 75px;
+      background: black;
+  }
+
+  .site-header .navbar-brand {
+      color: chartreuse;
+      font-size: 25px;
+      font-style: italic;
+  }
+
+  .site-header .navbar-brand:hover {
+      background: green;
+      color: white;
+  }
+
+  .site-header .navbar-nav .nav-link {
+      color: cyan;
+  }
+
+  .site-header .navbar-nav .nav-link:hover {
+      color: yellow;
+  }
+
+  .content-section {
+      background: #ffffff ; 
+      padding: 10px 20px;
+      border: 1px solid gray;
+      border-radius: 3px;
+      margin-bottom: 20px;
+  }
+
+  .article-content {
+      white-space: pre-line;
+      font-size: 18px;
+      text-align: justify;
+  }
+
+  .article-img {
+      height: 65px;
+      width: 65px;
+      margin-right: 16px;
+  }
+
+ .btn-success {
+  background: green;
+  color: white;
+ }
+
+ .btn-success:hover {
+   background: green;
+   color: black;
+ }
+
+ .btn-danger {
+    background: red;
+    color: white;
+ }
+
+  .btn-danger:hover {
+    background: red;
+    color: black;
+  }
+
+  .footer-section {
+    margin-bottom: 0px;
+    width: 100%;
+    padding: 35px;
+    background: black;
+    text-align: center;
+    color: white;
+
+</style>
+
+  {% if title %}
+    <title>Blog Home - {{ title }}</title>
+  {% else %}
+    <title>Blog Home</title>
+  {% endif %}
+
+  </head>
+
+
+  <body>
+
+    <!-- Navbar Left Side -->                                                                             
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md fixed-top">                                                                                              
+        <div class="container">                                                                                                     
+          <a class="navbar-brand mr-4 mb-2" href="{% url 'blog:home' %}">Blog Home</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">                                                                                              
+              <a class="nav-item nav-link" style="color: ivory; font-weight: lighter; font-size: 18px ;" href="{% url 'blog:about' %}">About</a>
+              <a class="nav-item nav-link" style="color: ivory; font-weight: lighter; font-size: 18px ;" href="{% url 'blog:policies' %}">Policies</a>
+              <a class="nav-item nav-link" style="color: ivory; font-weight: lighter; font-size: 18px ;" href="{% url 'blog:features' %}">Features</a>    
+              <a class="nav-item nav-link" style="color: ivory; font-weight: lighter; font-size: 18px ;" href="{% url 'blog:contact' %}">Contact</a>
+            </div>
+            
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">                                                                                              
+              <form class="form-inline mr-4" method="GET">
+                <input class="form-control mr-sm-1" name="q" type="search" placeholder="Search Posts" aria-label="Search" value="{{ request.GET.q }}">
+                 <input type="submit" value="Search" class="btn btn-outline-success btn-md my-0 ml-sm-0">
+              </form>
+
+              {% if user.is_authenticated %}
+                  <a class="nav-item nav-link" href="{% url 'blog:post-create'%}">Create Post</a>
+                  <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                  <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+              {% else %}                                                                                  
+                 <a class=" btn btn-outline-warning btn-lg" href="{% url 'login' %}">Sign In</a>
+                 <a class=" btn btn-outline-primary btn-lg ml-2" href="{% url 'register' %}">Sign Up</a>
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          {% if messages %}
+          {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+              </div>
+          {% endfor %}
+          {% endif %}
+
+          {% block content %}
+          {% for post in posts %}
+              <article class="media content-section">
+                <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+                <div class="media-body">
+                  <div class="article-metada">
+                    <h6>{{ post.author }}</6>
+                    <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                  </div> <hr>
+                  <p class="article-title"><h2>{{ post.title }}</h2></p>
+                  <p class="article-content">{{post.content|slice:":420" }}.....</p>
+                    <div class="mb-1">
+                      <a href="{% url 'blog:post-detail' post.slug  %}">
+                      <button class="btn btn-danger"><small>See more &raquo;</small></button></a>
+                    </div>
+                </div>
+              </article>
+        {% endfor %}
+        {% endblock content %}
+
+          <div class="mb-4">
+            {% if is_paginated %} <!--See the first comment below -->
+            {% if page_obj.has_previous %}
+                <a class="btn btn-success mt-5" href="?page=1">First</a>
+                <a class="btn btn-success mt-5" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-success mt-5" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-success mt-5" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}                                                  
+                <a class="btn btn-success mt-5" href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a class="btn btn-success mt-5" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+            {% endif %}
+          </div>
+        </div>
+
+    {% block sidebar %}
+        <div class="col-md-4">
+          <section class="sidebar">
+            <h1 style="text-align: center; background: greenyellow; color: black; padding: 5px; ">Latest Posts</h1>
+            <div class="list-group">                                                                     
+                {% for post in posts %}
+                    <a href="{% url 'blog:post-detail' post.slug %}" class="list-group-item list-group-item-action list-group-item-primary text-dark">
+                    {{post}}
+                    </a>
+                {% endfor %}
+            </div>
+          </section>
+        </div>
+    {% endblock sidebar %}
+  
+  </div>
+</div>
+
+  <footer class="footer-section">
+    <p>&copy;   
+       <!-- Dynamic Year -->
+   <script type="text/javascript">
+       document.write(new Date().getFullYear());
+   </script>
+       LocalHost.com, All Rights Reserved
+    </p>
+  </footer>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </body>
+  </html>
+
+<!-- 
+The code first checks "if pagination is enabled on the current page". If so then it adds next and previous links as appropriate (and the current page number).
+-->
+
+<!-- 
+The page_obj is a Paginator object that will exist if pagination is being used on the current page. 
+It (page_obj) allows you to get all the information about the current page, previous pages, how many pages there are, etc.
+-->
