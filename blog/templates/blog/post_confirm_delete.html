@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %}
+{% extends "base.html" %}
 {% block content %}
 	<div class="content-section">
 		<form method="POST">
@@ -7,9 +7,9 @@
 				<legend class="border-bottom mb-4">Delete Post</legend>
 				<h4>Are you sure you want to delete the post "{{ object.title }}"?</h4>
 			</fieldset>
-			<div style="text-align: center; margin-bottom: 10px;">
+			<div class="text-center mb-2">
 				<button class="btn btn-danger" type="submit">Yes, I'm sure</button>
-				<a class="btn btn-secondary" href="{% url 'blog:post-detail' post.slug %}">No, take me back</a>
+				<a class="btn btn-secondary" href="{% url 'blog:post-detail' slug=post.slug %}">No, take me back</a>
 			</div>
 		</form>
 	</div>

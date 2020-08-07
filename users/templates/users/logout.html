@@ -1,8 +1,8 @@
-{% extends "blog/base.html" %}
+{% extends "base.html" %}
 {% block content %}
-	<h2>You have been logged out!</h2>
+<h2 style="background: navy; color: white; padding: 30px;">You have been logged out!</h2>
 	<div class="border-top pt-3">
-		<a href="{% url 'login' %}"><button class="btn btn-outline-primary">Log In Again</button></a>
+		<a href="{% url 'login' %}"><button class="btn btn-outline-success">Log In Again</button></a>
 	</div>
-	<div style="width: 100%; height: 450px; "></div>
+<div style="width: 100%; height: 450px; "></div>
 {% endblock content %}

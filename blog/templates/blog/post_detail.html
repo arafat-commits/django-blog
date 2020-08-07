@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 
 {% if messages %}
@@ -16,16 +16,16 @@
         <div class="article-metadata">
           <div>
             <h6>{{ post.author }}</6>
-            <small class="text-muted">{{ post.date_posted }}</small>
+            <small class="text-muted ml-1">{{ post.date_posted }}</small>
           </div>          
           {% if object.author == user %}
             <div class="mt-2">
-              <a class="btn btn-success btn-sm mt-1 mb-1" href="{% url 'blog:post-update' post.slug %}">Update</a>
-              <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'blog:post-delete' post.slug %}">Delete</a>
+              <a class="btn btn-success btn-sm mt-1 mb-1" href="{% url 'blog:post-update' slug=post.slug %}">Update</a>
+              <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'blog:post-delete' slug=post.slug %}">Delete</a>
             </div>
           {% endif %}
         </div>
-        <h1 class="article-title" style="text-align: center; ">{{ object.title }}</h1>
+        <h1 class="article-title">{{ object.title }}</h1>
         <p class="article-content">{{ object.content }}</p>
       </div>
     </article>
@@ -50,11 +50,11 @@
 
     <div class="col-md-6 card mb-4  mt-3 ">
       <div class="card-body">
-        <h2>{{ post.comments.count }} Comments so far </h2> <!-- "comments.count"......'s' is a must -->
+        <h2 class="text-center">{{ post.comments.count }} Comments so far </h2> <!-- "comments.count"......'s' is a must -->
 
         
         {% for comment in post.comments.all %}
-          <div class="comments" style="padding: 10px;">
+          <div class="comments">
           <p class="font-weight-bold">
             {{ comment.name }}                              
             <span class=" text-muted font-weight-normal">

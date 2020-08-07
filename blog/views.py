@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostForm, CommentForm
 from django.contrib import messages
 from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+# from django.contrib.auth.decorators import login_required, user_passes_test (function-based-views er khetre)
 from .models import Post, Comment
 from django.views.generic import (
     ListView,
@@ -14,18 +15,24 @@ from django.views.generic import (
 
 """
 def home(request):
-    queryset = Post.objects.all().order_by('-date_posted')
+    posts = Post.objects.all().order_by('-date_posted')
     context = {
-        "posts": posts,
+        "posts": posts
     }
-    return render(request, "blog/home.html", context)
+    return render(request, 'blog/home.html', context)
+"""
+
+"""
+def home(request):
+    posts = Post.objects.all().order_by('-date_posted')
+    return render(request, 'blog/home.html', {'posts': posts})
 """
 
 class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
-    paginate_by = 7
+    paginate_by = 8
 
     # Post Search korar jonno ei method.
     def get_queryset(self):
@@ -34,7 +41,7 @@ class PostListView(ListView):
             posts = self.model.objects.filter(title__icontains=query)
         else:
             posts = self.model.objects.all()
-        return posts
+            return posts
 
 
 
@@ -62,7 +69,7 @@ class PostDetailView(DetailView):
                 comment.name = self.request.user
                 # Save the comment to the database
                 comment.save()
-                return redirect('blog:post-detail', post.slug)
+                return redirect('blog:post-detail', slug=slug)
 
        else:
            form = commentform()
@@ -78,9 +85,8 @@ def CreatePost(request):
         post.slug = slugify(post.title)
         post.author = request.user
         post.save()
-
-        messages.success(request, f'Your post has been created!')
-        return redirect('blog:post-detail', post.slug)
+        messages.success(request, f'Congratulations! Your post has been created!')
+        return redirect('blog:post-detail', slug=post.slug)
 
     else:
         form = PostForm()
@@ -101,13 +107,17 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         post = self.get_object()
         if self.request.user == post.author:
             return True
-        return False
+        return False 
 
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = '/' # You should return to home now. Because you have already deleted the post.
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
     def test_func(self):
         post = self.get_object()
@@ -128,6 +138,3 @@ def policies(request):
 def features(request):
     return render(request, 'blog/features.html', {'title': 'Features'})
 
-
-def contact(request):
-    return render(request, 'blog/contact.html', {'title': 'Contact'})

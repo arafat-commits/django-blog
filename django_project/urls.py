@@ -12,7 +12,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls), # admin site url route.
     path('blog/', include('blog.urls')),
-    path('', RedirectView.as_view(url='blog/')), # bujhar kotha. See the comment at the end.
+    path('', RedirectView.as_view(url='blog/')),
 
     # 'user_views' howate ei duto file e kebol 'users' app ti te thakbe. baki shob 'auth_views' ekshathe thakbe
     path('register/', user_views.register, name='register'), # function-based view(only 1 of 2 user_views)
@@ -41,7 +41,7 @@ urlpatterns = [
 
     path('password-reset-complete/', 
     auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), 
-    name='password_reset_complete'), # class-based view
+    name='password_reset_complete') # class-based view
 
     ]
 
