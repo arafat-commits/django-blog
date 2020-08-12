@@ -129,7 +129,7 @@
     margin-bottom: 0px;
     width: 100%;
     padding: 50px;
-    background: black;
+    background: maroon;
     text-align: center;
     color: white;
     font-style: italic;
@@ -214,7 +214,7 @@
                 <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
                 <div class="media-body">
                   <div class="article-metada">
-                    <h6>{{ post.author }}</6>
+                    <h6>{{ post.author }}</h6>
                     <small class="text-muted ml-1"><em>{{ post.date_posted|date:"F d, Y" }}</em></small>
                   </div> <hr>
                   <p class="article-title"><h2>{{ post.title }}</h2></p>
@@ -252,7 +252,7 @@
     {% block sidebar %}
         <div class="col-md-4">
           <section class="sidebar">
-            <h1 style="text-align: center; background: maroon; color: white; padding: 5px; ">Latest Posts</h1>
+            <h1 style="text-align: center; background: black; color: white; padding: 5px; ">Latest Posts</h1>
             <div class="list-group">                                                                     
                 {% for post in posts %}                                                                                                                       
                     <a href="{% url 'blog:post-detail' slug=post.slug %}" class="list-group-item list-group-item-action list-group-item-warning text-dark">
@@ -267,7 +267,7 @@
   </div>
 </div>
 
-<div style="width: 100%; height: 240px; "></div>
+<div style="width: 100%; height: 100px; "></div>
 
 <footer class="footer-section">
     <p class="text-center">&copy;   

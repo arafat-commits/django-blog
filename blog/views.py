@@ -32,6 +32,9 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
+    """ei line ti use kora hoy karon class based view use korle home template er
+       for loop hobe "for post in object_list". ei line ti dile "for post in posts" use kora jabe.
+       By default, ListView provide the context as object_list."""
     paginate_by = 8
 
     # Post Search korar jonno ei method.

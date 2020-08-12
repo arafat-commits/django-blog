@@ -23,12 +23,29 @@ class Post(models.Model):
 
 
 
+"""
+The related_name argument is useful if you have more complex related class names. For example, if you have a foreign key 
+relationship:
+
+class UserMapDataFrame(models.Model):
+    user = models.ForeignKey(User)
+
+Now, in order to access UserMapDataFrame objects from the related User, the default call would be 
+"User.usermapdataframe_set.all()", which it is quite difficult to read. Using the related_name 
+allows you to specify a simpler or more legible name to get the reverse relation. 
+In this case, if you specify user = models.ForeignKey(User, related_name='map_data'), 
+the call would then be User.map_data.all().
+
+related_name provides you an ability to let Django know how you are going to access Comment model from Post model 
+or in general how you can access reverse models which is the whole point in creating ManyToMany fields 
+and using ORM in that sense.
+"""
 class Comment(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, blank=True, null=True)
     text = models.TextField()
     date_created = models.DateTimeField(default=timezone.now)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments') #See the 56th line of 'post_detal' template.
 
     class Meta:
         ordering = ['date_created']

@@ -15,7 +15,7 @@
 <style>
 
   body {
-      background: #eee8ae;
+      background: #eee;
   }
 
   h1, h3, h4, h5 {
@@ -156,7 +156,7 @@
     margin-bottom: 0px;
     width: 100%;
     padding: 50px;
-    background: black;
+    background: maroon;
     text-align: center;
     color: white;
     font-style: italic;
@@ -230,7 +230,7 @@
 
           {% block content %} {% endblock content %}
 
-          <div class="mb-5">
+          <div>
             {% if is_paginated %} <!--See the first comment below -->
             {% if page_obj.has_previous %}
                 <a class="btn btn-primary mt-5" href="?page=1">First</a>
@@ -251,7 +251,7 @@
           </div>
         </div>
 
-    {% block sidebar %} {% endblock sidebar %}
+    {% block sidebar %} {% endblock %}
   
   </div>
 </div>
